@@ -11,48 +11,57 @@ namespace ZuydRoutePlanner
 			var graph = Generator.GenerateGraph();
 
 			// == CONFIG == 
-			string from = "Bus";
-			string to = "Centrale Hal";
 			bool requireAccessible = true;
 			bool emergencyMode = false;
-			bool startByCar = true;
+			bool startByCar = false;
 
-			// == CODE STARTS HERE == 
-			Node start = graph.FindNode(from);
-			Node end = graph.FindNode(to);
+			// == Test different from and to's == 
+			var testCases = new List<(string from, string to)>
+			{
+				("Bus", "Centrale Hal"),
+				("Hoofdingang", "Nieuw Eyckholt"),
+				("Centrale Hal", "Brug"),
+				("P1", "C.0.100"),
+				("Bus", "Pad"),
+				("Brug", "Trappen Centrale Hal")
+			};
 
-			// == Print Input Config ==
-			Console.WriteLine($"Van: {from}");
-			Console.WriteLine($"Naar: {to}");
-			Console.WriteLine($"Toegankelijkheid: {(requireAccessible ? "Rolstoel" : "Normaal")}");
-			Console.WriteLine($"Noodmodus: {(emergencyMode ? "Ja" : "Nee")}");
-			Console.WriteLine($"Start met auto: {(startByCar ? "Ja" : "Nee")}");
-			Console.WriteLine("\n---");
+			foreach (var (from, to) in testCases)
+			{
+				Console.WriteLine($"Testen van: {from} naar {to}");
+				Node start = graph.FindNode(from);
+				Node end = graph.FindNode(to);
 
-			// Time non-recursive method
-			Stopwatch stopwatch = Stopwatch.StartNew();
-			var (shortestPathNonRecursive, totalDistanceNonRecursive) = Dijkstra.FindShortestPath(graph, start, end, requireAccessible, emergencyMode, startByCar);
-			stopwatch.Stop();
-			long nonRecursiveTime = stopwatch.ElapsedTicks; // Get time in ticks
+				// == Print Input Config == 
+				Console.WriteLine($"Van: {from}");
+				Console.WriteLine($"Naar: {to}");
+				Console.WriteLine($"Toegankelijkheid: {(requireAccessible ? "Rolstoel" : "Normaal")}");
+				Console.WriteLine($"Noodmodus: {(emergencyMode ? "Ja" : "Nee")}");
+				Console.WriteLine($"Start met auto: {(startByCar ? "Ja" : "Nee")}");
+				Console.WriteLine("\n---");
 
-			// Time recursive method
-			stopwatch.Restart();
-			var (shortestPathRecursive, totalDistanceRecursive) = Dijkstra.FindShortestPathRec(graph, start, end, requireAccessible, emergencyMode, startByCar);
-			stopwatch.Stop();
-			long recursiveTime = stopwatch.ElapsedTicks; // Get time in ticks
+				// Time non-recursive method
+				Stopwatch stopwatch = Stopwatch.StartNew();
+				var (shortestPathNonRecursive, totalDistanceNonRecursive) = Dijkstra.FindShortestPath(graph, start, end, requireAccessible, emergencyMode, startByCar);
+				stopwatch.Stop();
+				long nonRecursiveTime = stopwatch.ElapsedTicks; // Get time in ticks
 
-			// == Output Results ==
-			Console.WriteLine($"\nNon-recursive method completed in: {nonRecursiveTime} ticks");
-			Console.WriteLine($"Recursive method completed in: {recursiveTime} ticks");
+				// Time recursive method
+				stopwatch.Restart();
+				var (shortestPathRecursive, totalDistanceRecursive) = Dijkstra.FindShortestPathRec(graph, start, end, requireAccessible, emergencyMode, startByCar);
+				stopwatch.Stop();
+				long recursiveTime = stopwatch.ElapsedTicks; // Get time in ticks
 
-			// == Path and Distance Output
-			
-			Console.WriteLine($"Time difference: {Math.Abs(nonRecursiveTime - recursiveTime)} ticks");
+				// == Output Results == 
+				Console.WriteLine($"\nNon-recursive method completed in: {nonRecursiveTime} ticks");
+				Console.WriteLine($"Recursive method completed in: {recursiveTime} ticks");
 
-			Console.WriteLine("\n---");
-			Console.WriteLine($"\nTotal distance: {totalDistanceNonRecursive}");
+				// == Path and Distance Output
+				Console.WriteLine($"Time difference: {Math.Abs(nonRecursiveTime - recursiveTime)} ticks");
 
-
+				Console.WriteLine("\n---");
+				Console.WriteLine($"\nTotal distance: {totalDistanceNonRecursive}");
+			}
 		}
 	}
 }
