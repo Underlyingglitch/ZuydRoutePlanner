@@ -31,13 +31,13 @@ namespace ZuydRoutePlanner
 
 			// Time non-recursive method
 			Stopwatch stopwatch = Stopwatch.StartNew();
-			var (shortestPathNonRecursive, totalDistanceNonRecursive) = FindShortestPathNonRecursive(graph, start, end, requireAccessible, emergencyMode, startByCar);
+			var (shortestPathNonRecursive, totalDistanceNonRecursive) = Dijkstra.FindShortestPath(graph, start, end, requireAccessible, emergencyMode, startByCar);
 			stopwatch.Stop();
 			long nonRecursiveTime = stopwatch.ElapsedTicks; // Get time in ticks
 
 			// Time recursive method
 			stopwatch.Restart();
-			var (shortestPathRecursive, totalDistanceRecursive) = FindShortestPathRecursive(graph, start, end, requireAccessible, emergencyMode, startByCar);
+			var (shortestPathRecursive, totalDistanceRecursive) = Dijkstra.FindShortestPathRec(graph, start, end, requireAccessible, emergencyMode, startByCar);
 			stopwatch.Stop();
 			long recursiveTime = stopwatch.ElapsedTicks; // Get time in ticks
 
@@ -53,20 +53,6 @@ namespace ZuydRoutePlanner
 			Console.WriteLine($"\nTotal distance: {totalDistanceNonRecursive}");
 
 
-		}
-
-		// Non-recursive Dijkstra
-		static (List<Node> path, double totalDistance) FindShortestPathNonRecursive(Graph graph, Node start, Node end, bool requireAccessible, bool emergencyMode, bool startByCar)
-		{
-			var (shortestPath, totalDistance) = Dijkstra.FindShortestPath(graph, start, end, requireAccessible, emergencyMode, startByCar);
-			return (shortestPath, totalDistance);
-		}
-
-		// Recursive Dijkstra
-		static (List<Node> path, double totalDistance) FindShortestPathRecursive(Graph graph, Node start, Node end, bool requireAccessible, bool emergencyMode, bool startByCar)
-		{
-			var (shortestPath, totalDistance) = Dijkstra.FindShortestPathRec(graph, start, end, requireAccessible, emergencyMode, startByCar);
-			return (shortestPath, totalDistance);
 		}
 	}
 }
