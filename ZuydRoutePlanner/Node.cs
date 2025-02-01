@@ -9,17 +9,15 @@ namespace ZuydRoutePlanner
     public class Node
     {
         public string Name { get; set; }
-        public bool IsDoor { get; set; }
         public bool IsEmegencyOnly { get; set; }
         public bool Hidden { get; set; }
         public bool IsParking { get; set; }
         public bool RequireAccessible { get; set; }
         public List<Edge> Edges { get; set; }
 
-        public Node(string _name, bool _isDoor = false, bool _isEmergencyOnly = false, bool _hidden = false, bool _isParking = false, bool _requireAccessible = false)
+        public Node(string _name, bool _isEmergencyOnly = false, bool _hidden = false, bool _isParking = false, bool _requireAccessible = false)
         {
             Name = _name;
-            IsDoor = _isDoor;
             IsEmegencyOnly = _isEmergencyOnly;
             Hidden = _hidden;
             IsParking = _isParking;

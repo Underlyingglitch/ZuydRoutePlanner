@@ -13,7 +13,7 @@ namespace ZuydRoutePlanner
         {
             var g = new Graph();
 
-            g.AddNode("Hoofdingang", _isDoor:true);
+            g.AddNode("Hoofdingang");
             g.AddNode("Centrale Hal");
             g.AddEdge("Hoofdingang", "Centrale Hal", CD(10.5, 10.5));
 
@@ -66,7 +66,8 @@ namespace ZuydRoutePlanner
             g.AddEdge("Nieuw Eyckholt", "PG", 40, _isAccessibleByCar: true);
             g.AddEdge("Nieuw Eyckholt", "Pad", 10);
             g.AddEdge("PG", "Centrale Hal", 10);
-            g.AddEdge("P1", "Hoofdingang", 20);
+            g.AddEdge("P1", "Hoofdingang", 20, _isAccessible:false);
+            g.AddEdge("P1", "PG", 10, _isAccessibleByCar: true);
 
             return g;
         }

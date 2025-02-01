@@ -21,9 +21,9 @@ namespace ZuydRoutePlanner
             return _node;
         }
 
-        public Node AddNode(string _name, bool _isDoor = false, bool _isEmergencyOnly = false, bool _hidden = false, bool _isParking = false, bool _requireAccessible = false)
+        public Node AddNode(string _name, bool _isEmergencyOnly = false, bool _hidden = false, bool _isParking = false, bool _requireAccessible = false)
         {
-            return this.AddNode(new Node(_name, _isDoor, _isEmergencyOnly:_isEmergencyOnly, _hidden:_hidden, _isParking:_isParking, _requireAccessible:_requireAccessible));
+            return this.AddNode(new Node(_name, _isEmergencyOnly:_isEmergencyOnly, _hidden:_hidden, _isParking:_isParking, _requireAccessible:_requireAccessible));
         }
 
         public void AddEdge(Node _from, Node _to, double _distance, bool _isAccessible = true, bool _isEmergencyBlocked = false, bool _isAccessibleByCar = false)
