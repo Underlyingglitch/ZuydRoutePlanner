@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -36,14 +37,10 @@ namespace ZuydRoutePlanner
 
 				foreach (var edge in currentNode.Edges)
 				{
-					if ((emergencyMode && edge.IsEmergencyBlocked) ||
-						(!emergencyMode && edge.Destination.IsEmegencyOnly) ||
-						(requireAccessible && !edge.IsAccessible) ||
-						(!requireAccessible && edge.Destination.RequireAccessible) ||
-						(isCarMode && !edge.IsAccessibleByCar && !currentNode.IsParking))
-						continue;
+					if (!IsPathAllowed(edge, currentNode, emergencyMode, isCarMode, requireAccessible))
+                        continue;
 
-					double newDist = currentDistance + edge.Distance;
+                    double newDist = currentDistance + edge.Distance;
 					if (newDist < distances[edge.Destination])
 					{
 						priorityQueue.Remove((edge.Destination, distances[edge.Destination]));
@@ -101,16 +98,7 @@ namespace ZuydRoutePlanner
 
             foreach (var edge in currentNode.Edges)
             {
-                // Skip edges that are blocked during emergency
-                if ((emergencyMode && edge.IsEmergencyBlocked) ||
-                    // Skip doors that are emergency only when not in emergency mode
-                    (!emergencyMode && edge.Destination.IsEmegencyOnly) ||
-                    // Skip edges that are not accessible when accessibility is required
-                    (requireAccessible && !edge.IsAccessible) ||
-                    // Skip edges that need accessibility required (such as the elevator)
-                    (!requireAccessible && edge.Destination.RequireAccessible) ||
-                    // Skip edges that are not accessible by car when in car mode
-                    (isCarMode && !edge.IsAccessibleByCar && !currentNode.IsParking))
+                if (!IsPathAllowed(edge, currentNode, emergencyMode, isCarMode, requireAccessible))
                     continue;
 
                 double newDist = distances[currentNode] + edge.Distance;
@@ -129,6 +117,22 @@ namespace ZuydRoutePlanner
                     FindShortestPathRecursive(graph, edge.Destination, end, requireAccessible, emergencyMode, nextIsCarMode, distances, previous);
                 }
             }
+        }
+
+        private static bool IsPathAllowed(Edge _edge, Node _currentNode, bool _emergencyMode, bool _isCarMode, bool _requireAccessible)
+        {
+            // Skip edges that are blocked during emergency
+            if ((_emergencyMode && _edge.IsEmergencyBlocked) ||
+                        // Skip doors that are emergency only when not in emergency mode
+                        (!_emergencyMode && _edge.Destination.IsEmegencyOnly) ||
+                        // Skip edges that are not accessible when accessibility is required
+                        (_requireAccessible && !_edge.IsAccessible) ||
+                        // Skip edges that need accessibility required (such as the elevator)
+                        (!_requireAccessible && _edge.Destination.RequireAccessible) ||
+                        // Skip edges that are not accessible by car when in car mode
+                        (_isCarMode && !_edge.IsAccessibleByCar && !_currentNode.IsParking))
+                return false;
+            return true;
         }
     }
 }
