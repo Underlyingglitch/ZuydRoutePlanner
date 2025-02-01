@@ -68,6 +68,7 @@ namespace ZuydRoutePlanner
             g.AddEdge("PG", "Centrale Hal", 10);
             g.AddEdge("P1", "Hoofdingang", 20, _isAccessible:false);
             g.AddEdge("P1", "PG", 10, _isAccessibleByCar: true);
+            g.AddEdge("Bus", "Nieuw Eyckholt", 50, _isAccessibleByCar: true);
 
             return g;
         }
