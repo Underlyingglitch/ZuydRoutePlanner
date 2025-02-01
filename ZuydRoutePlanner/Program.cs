@@ -13,11 +13,14 @@ namespace ZuydRoutePlanner
         {
             var graph = Generator.GenerateGraph();
 
+            // == CONFIG == 
             string from = "Nieuw Eyckholt";
             string to = "Centrale Hal";
             bool requireAccessible = true;
             bool emergencyMode = false;
             bool startByCar = true;
+
+            // == CODE STARTS HERE ==
             Node start = graph.FindNode(from);
             Node end = graph.FindNode(to);
 
