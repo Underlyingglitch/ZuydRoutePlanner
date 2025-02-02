@@ -119,6 +119,45 @@ namespace ZuydRoutePlanner
             }
         }
 
+        public static (List<Node> path, double totalDistance) FindShortestPathViaPoints(Graph graph, Node start, Node end, List<Node> viaPoints, bool requireAccessible, bool emergencyMode, bool startByCar)
+        {
+            var fullPath = new List<Node>();
+            double totalDistance = 0.0;
+
+            Node currentStart = start;
+            bool isCarMode = startByCar;
+
+            foreach (var point in viaPoints)
+            {
+                var (pathSegment, segmentDistance) = FindShortestPathRec(graph, currentStart, point, requireAccessible, emergencyMode, isCarMode);
+                if (fullPath.Count > 0)
+                {
+                    // Remove the last node to avoid duplication
+                    fullPath.RemoveAt(fullPath.Count - 1);
+                }
+                fullPath.AddRange(pathSegment);
+                totalDistance += segmentDistance;
+                currentStart = point;
+
+                // Update isCarMode if the point is a parking node
+                if (isCarMode && point.IsParking && (!requireAccessible || point.RequireAccessible))
+                {
+                    isCarMode = false;
+                }
+            }
+
+            var (finalPathSegment, finalSegmentDistance) = FindShortestPathRec(graph, currentStart, end, requireAccessible, emergencyMode, isCarMode);
+            if (fullPath.Count > 0)
+            {
+                // Remove the last node to avoid duplication
+                fullPath.RemoveAt(fullPath.Count - 1);
+            }
+            fullPath.AddRange(finalPathSegment);
+            totalDistance += finalSegmentDistance;
+
+            return (fullPath, totalDistance);
+        }
+
         private static bool IsPathAllowed(Edge _edge, Node _currentNode, bool _emergencyMode, bool _isCarMode, bool _requireAccessible)
         {
             // Skip edges that are blocked during emergency
