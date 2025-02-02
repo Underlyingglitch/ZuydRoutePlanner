@@ -1,9 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ZuydRoutePlanner
 {
@@ -130,11 +126,23 @@ namespace ZuydRoutePlanner
             return g;
         }
 
+        /// <summary>
+        /// Calculate the distance using Pythagoras' theorem.
+        /// </summary>
+        /// <param name="_a"></param>
+        /// <param name="_b"></param>
+        /// <returns>Distance</returns>
         public static double CalculateDistance(double _a, double _b)
         {
             return Math.Sqrt(Math.Pow(_a, 2) + Math.Pow(_b, 2));
         }
 
+        /// <summary>
+        /// Short for CalculateDistance.
+        /// </summary>
+        /// <param name="_a"></param>
+        /// <param name="_b"></param>
+        /// <returns></returns>
         public static double CD(double _a, double _b)
         {
             return CalculateDistance(_a, _b);

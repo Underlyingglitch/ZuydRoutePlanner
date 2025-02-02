@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace ZuydRoutePlanner
 {
@@ -51,7 +45,8 @@ namespace ZuydRoutePlanner
 					}
 				}
 
-				if (isCarMode && currentNode.IsParking && (!_requireAccessible || currentNode.RequireAccessible))
+                // Switch to foot mode if a parking node is reached. Also check if the parking node requires accessibility flag to be set.
+                if (isCarMode && currentNode.IsParking && (!_requireAccessible || currentNode.RequireAccessible))
 				{
 					isCarMode = false;
 				}
@@ -118,7 +113,7 @@ namespace ZuydRoutePlanner
                     _distances[edge.Destination] = newDist;
                     _previous[edge.Destination] = _currentNode;
 
-                    // Switch to foot mode if a parking node is reached and it is accessible if required
+                    // Switch to foot mode if a parking node is reached. Also check if the parking node requires accessibility flag to be set.
                     bool nextIsCarMode = _isCarMode;
                     if (_isCarMode && _currentNode.IsParking && (!_requireAccessible || _currentNode.RequireAccessible))
                     {
@@ -150,7 +145,7 @@ namespace ZuydRoutePlanner
                 totalDistance += segmentDistance;
                 currentStart = point;
 
-                // Update isCarMode if the point is a parking node
+                // Switch to foot mode if a parking node is reached. Also check if the parking node requires accessibility flag to be set.
                 if (isCarMode && point.IsParking && (!_requireAccessible || point.RequireAccessible))
                 {
                     isCarMode = false;

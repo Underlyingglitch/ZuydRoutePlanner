@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 
 namespace ZuydRoutePlanner
 {
@@ -11,20 +10,24 @@ namespace ZuydRoutePlanner
             var graph = Generator.GenerateGraph();
 
             // == CONFIG == 
-            string from = "C.3.2";
-            string to = "Hoofdingang";
-            bool requireAccessible = false;
-            bool emergencyMode = true;
-            bool startByCar = false;
-            bool isOrganiser = true;
-            List<Node> via = new List<Node>();
-            List<Node> exclude = new List<Node>();
+            string from = "C.3.2"; // Name of the node to start from
+            string to = "Hoofdingang"; // Name of the node to go to
+            bool requireAccessible = false; // Does this route need to be wheelchair accessible?
+            bool emergencyMode = true; // Is this route in emergency mode? (Blocks routes such as elevators)
+            bool startByCar = false; // Does the user start in a car? (Will not allow non-car-accessible routes until a parking lot is found)
+            bool isOrganiser = true; // Is the user an organiser? (Allows for routes that require accessibility, but will not force it)
+            List<Node> via = new List<Node>(); // List of nodes to pass through
+            List<Node> exclude = new List<Node>(); // List of nodes to exclude
 
-            Node start = graph.FindNode(from);
-            Node end = graph.FindNode(to);
             //via.Add(graph.FindNode("C.0.100"));
             //via.Add(graph.FindNode("C.0.103"));
             //exclude.Add(graph.FindNode("Hoofdingang"));
+
+
+            // == APPLICATION CODE == 
+            Node start = graph.FindNode(from);
+            Node end = graph.FindNode(to);
+            
 
             var (shortestPathRecursive, totalDistanceRecursive) = Dijkstra.FindShortestPathViaPoints(graph, start, end, via, requireAccessible, emergencyMode, startByCar, isOrganiser, exclude);
 
@@ -40,7 +43,7 @@ namespace ZuydRoutePlanner
             nodes.Add(end);
             PrintRoute(shortestPathRecursive, totalDistanceRecursive, nodes);
 
-            //// == Test different from and to's == 
+            //// == TEST CASES == 
             //var testCases = new List<(string from, string to)>
             //{
             //    ("Bus", "Centrale Hal"),
@@ -99,12 +102,15 @@ namespace ZuydRoutePlanner
             }
             foreach (Node node in _path)
             {
+                // If the node is part of the start, end or via nodes, color it green
                 if (_nodes.Contains(node))
                 {
                     // Change color
                     Console.ForegroundColor = ConsoleColor.Green;
                 }
                 Console.Write(node.Name);
+                // If the node is hidden, add (hidden) to the name (for debugging purposes)
+                // these nodes should not be part of the route shown to the user, but are useful for debugging and front-end development
                 if (node.Hidden)
                 {
                     Console.Write(" (hidden)");
