@@ -53,7 +53,12 @@ namespace ZuydRoutePlanner
 
         public Node FindNode(string name)
         {
-            return Nodes.Find(n => n.Name == name);
+            var node = Nodes.Find(n => n.Name == name);
+            if (node == null)
+            {
+                throw new KeyNotFoundException($"Node with name '{name}' not found.");
+            }
+            return node;
         }
     }
 }
